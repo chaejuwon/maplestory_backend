@@ -55,9 +55,10 @@ app.get("/character", async (req, res) => {
 
 // 랭킹데이터
 app.get("/rank", async (req, res) => {
-  console.log(req, res);
-  const { world_name = "스카니아", page = 1 } = req.query;
-  const cacheKey = `rank:${world_name}:${page}`;
+  const { date } = req.query;
+  if (!date) return res.status(400).json({ error: "Missing Date" });
+
+  const cacheKey = `rank:${date}`;
   const cached = getCache(cacheKey);
   if (cached) {
     return res.json({ ...cached, cached: true });
@@ -66,10 +67,11 @@ app.get("/rank", async (req, res) => {
   try {
     const response = await axios.get(`${BASE_URL}/ranking/overall`, {
       headers,
-      params: { world_name, page },
+      params: { date },
     });
 
     const responseData = response.data;
+    console.log(responseData);
 
     // 캐시에 저장 (30분)
     setCache(cacheKey, responseData, 1000 * 60 * 30);
