@@ -83,13 +83,6 @@ app.get("/rank", async (req, res) => {
       theSeed: theSeed.data,
       achievement: achievement.data,
     };
-    // const response = await axios.get(`${BASE_URL}/ranking/overall`, {
-    //   headers,
-    //   params: { date },
-    // });
-
-    // const responseData = response.data;
-    // console.log(responseData);
 
     // 캐시에 저장 (30분)
     setCache(cacheKey, responseData, 1000 * 60 * 30);
