@@ -66,7 +66,7 @@ app.get("/rank", async (req, res) => {
 
   try {
 
-    const [overall, union, guild, dojang, theseed, achievement] = await Promise.all([
+    const [overall, union, guild, doJang, theSeed, achievement] = await Promise.all([
       axios.get(`${BASE_URL}/ranking/overall`, { headers, params: { date } }),
       axios.get(`${BASE_URL}/ranking/union`, { headers, params: { date } }),
       axios.get(`${BASE_URL}/ranking/guild`, { headers, params: { date, ranking_type: 2 } }),
@@ -79,11 +79,10 @@ app.get("/rank", async (req, res) => {
       overall: overall.data,
       union: union.data,
       guild: guild.data,
-      dojang: dojang.data,
-      theseed: theseed.data,
+      doJang: doJang.data,
+      theSeed: theSeed.data,
       achievement: achievement.data,
     };
-    console.log(responseData.achievement);
     // const response = await axios.get(`${BASE_URL}/ranking/overall`, {
     //   headers,
     //   params: { date },
