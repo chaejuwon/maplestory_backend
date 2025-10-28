@@ -65,13 +65,32 @@ app.get("/rank", async (req, res) => {
   }
 
   try {
-    const response = await axios.get(`${BASE_URL}/ranking/overall`, {
-      headers,
-      params: { date },
-    });
 
-    const responseData = response.data;
-    console.log(responseData);
+    const [overall, union, guild, dojang, theseed, achievement] = await Promise.all([
+      axios.get(`${BASE_URL}/ranking/overall`, { headers, params: { date } }),
+      axios.get(`${BASE_URL}/ranking/union`, { headers, params: { date } }),
+      axios.get(`${BASE_URL}/ranking/guild`, { headers, params: { date, ranking_type: 2 } }),
+      axios.get(`${BASE_URL}/ranking/dojang`, { headers, params: { date, difficulty: 0 } }),
+      axios.get(`${BASE_URL}/ranking/theseed`, { headers, params: { date } }),
+      axios.get(`${BASE_URL}/ranking/achievement`, { headers, params: { date } }),
+
+    ]);
+    const responseData = {
+      overall: overall.data,
+      union: union.data,
+      guild: guild.data,
+      dojang: dojang.data,
+      theseed: theseed.data,
+      achievement: achievement.data,
+    };
+    console.log(responseData.achievement);
+    // const response = await axios.get(`${BASE_URL}/ranking/overall`, {
+    //   headers,
+    //   params: { date },
+    // });
+
+    // const responseData = response.data;
+    // console.log(responseData);
 
     // 캐시에 저장 (30분)
     setCache(cacheKey, responseData, 1000 * 60 * 30);
