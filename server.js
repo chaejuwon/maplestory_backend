@@ -93,6 +93,41 @@ app.get("/rank", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch rank data" });
   }
 });
+// 길드데이터
+app.get("/guild", async (req, res) => {
+  const { title } = req.query;
+  if (!title) return res.status(400).json({ error: "Enter Guild title" });
+
+  const cacheKey = `rank:${date}`;
+  const cached = getCache(cacheKey);
+  if (cached) {
+    return res.json({ ...cached, cached: true });
+  }
+  try {
+    const guildOguildId = await axios.get(`${BASE_URL}/guild/id`,
+      {
+        headers,
+        params: {
+        guild_name: title
+      }});
+    const oguildIdValue = guildOguildId.data.oguild_id;
+    console.log(oguildIdValue);
+    const guildInfo = await axios.get(`${BASE_URL}/guild/basic`,
+      {
+        headers,
+        params: {
+          oguild_id: oguildIdValue
+        }
+      });
+    const responseData = guildInfo.data;
+    // 캐시에 저장 (30분)
+    setCache(cacheKey, responseData, 1000 * 60 * 30);
+
+    res.json({ ...responseData, cached: false });
+  } catch {
+
+  }
+});
 
 app.listen(4000, () => {
   console.log("Server running on mapleStory Api");
