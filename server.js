@@ -98,7 +98,7 @@ app.get("/guild", async (req, res) => {
   const { title } = req.query;
   if (!title) return res.status(400).json({ error: "Enter Guild title" });
 
-  const cacheKey = `rank:${date}`;
+  const cacheKey = `guild:${title}`;
   const cached = getCache(cacheKey);
   if (cached) {
     return res.json({ ...cached, cached: true });
@@ -125,7 +125,8 @@ app.get("/guild", async (req, res) => {
 
     res.json({ ...responseData, cached: false });
   } catch {
-
+    console.error("❌ Guild API Error:", err.message);
+    res.status(500).json({ error: "Failed to fetch Guild data" });
   }
 });
 
