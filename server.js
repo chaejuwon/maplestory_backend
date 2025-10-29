@@ -95,10 +95,10 @@ app.get("/rank", async (req, res) => {
 });
 // 길드데이터
 app.get("/guild", async (req, res) => {
-  const { title } = req.query;
-  if (!title) return res.status(400).json({ error: "Enter Guild title" });
+  const { guild_name } = req.query;
+  if (!guild_name) return res.status(400).json({ error: "Enter Guild title" });
 
-  const cacheKey = `guild:${title}`;
+  const cacheKey = `guild:${guild_name}`;
   const cached = getCache(cacheKey);
   if (cached) {
     return res.json({ ...cached, cached: true });
@@ -108,7 +108,7 @@ app.get("/guild", async (req, res) => {
       {
         headers,
         params: {
-        guild_name: title
+        guild_name: guild_name
       }});
     const oguildIdValue = guildOguildId.data.oguild_id;
     console.log(oguildIdValue);
