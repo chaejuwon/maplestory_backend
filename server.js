@@ -108,7 +108,8 @@ app.get("/guild", async (req, res) => {
       {
         headers,
         params: {
-        guild_name: guild_name
+        guild_name: guild_name,
+        world_name: '스카니아'
       }});
     const oguildIdValue = guildOguildId.data.oguild_id;
     console.log(oguildIdValue);
