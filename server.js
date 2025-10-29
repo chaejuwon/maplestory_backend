@@ -95,7 +95,7 @@ app.get("/rank", async (req, res) => {
 });
 // 길드데이터
 app.get("/guild", async (req, res) => {
-  const { guild_name } = req.query;
+  const { guild_name, world_name } = req.query;
   if (!guild_name) return res.status(400).json({ error: "Enter Guild title" });
 
   const cacheKey = `guild:${guild_name}`;
@@ -109,7 +109,7 @@ app.get("/guild", async (req, res) => {
         headers,
         params: {
         guild_name: guild_name,
-        world_name: '스카니아'
+        world_name: world_name
       }});
     const oguildIdValue = guildOguildId.data.oguild_id;
     console.log(oguildIdValue);
